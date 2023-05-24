@@ -1,0 +1,13 @@
+#+TITLE: README
+#+STARTUP: showall hidestarts
+* Proyecto Final Programación Declarativa
+
+  ~Diego Méndez Medina~ *42004358*
+  
+** Automatás Traductores. Ejemplos, traducción y visualización.
+  
+   ... 
+
+   ---
+
+   +++ 
