@@ -1,0 +1,18 @@
+* TODO Implementación
+  # Siguiendo la recomendación de Juan Pablo primero me enfocare en construir los automátas 
+  # y visualizarlos. 
+  - [ ] Crear un formato para crear automatas desde un .txt
+  - [ ] Pasarlo a Haskell
+  - [ ] Desplegarlo en entornio gráfico
+  
+* Documento
+** Analísis del problema
+** Antecedentes
+** Revisión bibliográfica
+
+* 
+- Hipótesis
+- metodología
+- Interpretación de resultados
+- Propuesta de trabajo futuro 
+
