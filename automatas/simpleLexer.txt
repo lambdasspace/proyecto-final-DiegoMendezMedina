@@ -1,0 +1,12 @@
+Moore.
+Inicial    = q0.
+Finales    = q10, q4, q8, q12.
+Estados    = q0, q1, q2,q3,q4,q6,q7,q8,q9,q10,q11,q12.
+Entrada    = c,a,m,o,s,e.
+Salida     = _,1,2,3,4.
+Transicion = q0->c->q1, q1->a->q2, q1->o->q6,
+	   q2->m->q9, q2->s->q3, q6->m->q7,
+	   q6->s->q11, q9->a->q10, q3->a->q4,
+	   q7->e->q8, q11->a->q12.
+Respuesta  = q0->_, q1->_, q2->_, q3->_,q4->1,
+	   q7->_, q8->3,q9->_, q10->2, q11->_, q12->4.

@@ -1,50 +1,62 @@
 module Main where
 
 import System.IO
+import System.Exit
 import Control.Monad
-import Data.List.Split
 import Automata
-import Data.Char
+import Read
 
-auxRead :: Char -> [[Char]] -> [[Char]]
-auxRead '.' l = []:l
-auxRead '\n' l = l
-auxRead '\t' l = l
-auxRead c []   = [[c]]
-auxRead c (x:xs) = (c:x):xs
-
-readLines :: [Char] -> [[Char]]
-readLines = foldr auxRead []
-
-removeBlank :: [[Char]] -> [[Char]]
-removeBlank [] = []
-removeBlank (x:xs) = removeBlankAux x : removeBlank xs
-
-removeBlankAux :: [Char] -> [Char]
-removeBlankAux [] = []
-removeBlankAux (x:xs)
-  | x == ' ' = removeBlankAux xs
-  | otherwise = x:removeBlankAux xs
-
-miSplit :: [Char] -> [[Char]]
-miSplit x = splitOn "=" x
-
-createDuple :: [[Char]] -> ([Char], [Char])
-createDuple [[]] = ([],[])
-createDuple x
-  | length x == 1 = if head x == "Moore"
-                    then (head x, "1")
-                    else (head x, "ERROR")
-  | length x == 2 = (a, b)
-  | otherwise     = ("ERROR", "ERROR")
-    where
-      a = head x
-      b = head $ drop 1 x
-
+  
 main = do
-  let automata = Moore 
   archivo <- getLine
-  contents <- readFile $ "../samples/"++archivo
-  print .  map createDuple $ map miSplit $ removeBlank $ readLines $  contents
-  -- Usar constructores para darle valores al
-  --    automata. Hacer la interfaz gráfica
+  contents <- readFile $ "../automatas/"++archivo
+  let values = map createDuple $ map miSplit $ removeBlank $ readLines $  contents
+  if (length values) /= 8
+    then do
+    putStrLn "Archivo Fallida"
+    exitFailure
+    else do
+    putStrLn "Archivo Valido"
+  -- obtener datos del archivo
+  let nEstados = getEstados values
+  let nEntrada = getEntrada values
+  let nSalida  = getSalida  values
+  let nTrans   = getTrans   values
+  let nRes     = getRes     values
+  let nInit    = getInit    values
+  let nFinal   = getFinales values
+  -- Crear el automáta
+  let estados automata = nEstados
+  let automata = Moore
+        {estados = nEstados,
+         alfabetoEntrada = nEntrada,
+         alfabetoSalida = nSalida,
+         transiciones = nTrans,
+         fRespuestas = nRes,
+         inicial = nInit,
+         finales = nFinal
+        }
+  let checkAut = checkMoore automata
+  print checkAut    
+  entrada <- getLine -- Verificar entrada
+  let valida = checkCadena automata entrada
+  if not valida then do
+    putStrLn "Cadena Fallida"
+    exitFailure
+    else  do
+    putStrLn "Cadena Válida"
+  let trans    = transitaMoore automata entrada
+  let traducc  = traduceMoore automata entrada
+  if (length trans) /= (length entrada)+1 then
+    do
+      putStrLn "No se pudo procesar toda la cadena"
+    else
+    putStrLn "Se pudo procesar toda la cadena"
+  let aceptada = aceptaMoore automata entrada
+  print automata
+  print trans
+  print traducc
+  print aceptada
+    -- Menu
+    -- putStrLn "Que deseas hacer: \n1) Imprimir Automata\n2) Introducir Cadena"
+    

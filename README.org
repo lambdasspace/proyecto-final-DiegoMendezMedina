@@ -5,9 +5,17 @@
   /Diego Méndez Medina/ *42004358*
   
 ** Automatás Traductores. Ejemplos, traducción y visualización.
+  
+*** Requerimientos
+    
+    - [[https://hackage.haskell.org/package/gloss][Gloss]]
+      
+      Con cabal ejecutar: 
 
-   ... 
+      ~~$ cabal install gloss~
 
-   ---
+    - [[https://hackage.haskell.org/package/split][Split]]
 
-   +++ 
+      Con cabal ejecutar: 
+
+      ~~$ cabal install split~      
