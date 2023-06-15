@@ -4,21 +4,28 @@ type Estado = [Char]
 type Alfabeto = Char
 type Transicion = (Estado, Alfabeto, Estado)
 type Respuesta  =  (Estado, Alfabeto)
+type RespuestaMealy  =  (Estado, Alfabeto, Alfabeto)
 
---type Automata = Moore | Mealy
-
-data Moore = Moore{
+data Automata = Automata{
   estados :: [Estado],
   alfabetoEntrada :: [Alfabeto],
   alfabetoSalida  :: [Alfabeto],
   transiciones :: [Transicion],
-  fRespuestas :: [Respuesta],
   inicial :: Estado,
   finales :: [Estado]
   } deriving Show
+  
+data Moore = Moore{  
+  fRespuestas :: [Respuesta],
+  automataMoore :: Automata
+  } deriving Show
 
+data Mealy = Mealy{
+  fRespuestasM :: [RespuestaMealy],
+  automataMealy :: Automata
+  } deriving Show
 
-checkCadena :: Moore -> [Alfabeto] -> Bool
+checkCadena :: Automata -> [Alfabeto] -> Bool
 checkCadena m s = checkCadenaAux (alfabetoEntrada m) s
   where checkCadenaAux _ [] = True
         checkCadenaAux l (x:xs)
@@ -31,11 +38,11 @@ checkCadena m s = checkCadenaAux (alfabetoEntrada m) s
 checkMoore :: Moore -> Bool
 checkMoore m = checkTrans && checkRes && checkInit && checkFin
   where
-    etats = estados m
-    checkTrans = checkTransiciones (transiciones m) etats (alfabetoEntrada m)
-    checkRes   = checkRespuestas (fRespuestas m) etats (alfabetoSalida m)
-    checkInit  = elem (inicial m) etats
-    checkFin   = checkFinal (finales m) etats
+    etats = estados (automataMoore m)
+    checkTrans = checkTransiciones (transiciones (automataMoore m))  etats (alfabetoEntrada (automataMoore m))
+    checkRes   = checkRespuestas (fRespuestas m) etats (alfabetoSalida (automataMoore m))
+    checkInit  = elem (inicial (automataMoore m)) etats
+    checkFin   = checkFinal (finales (automataMoore m)) etats
    
     
 -- | checkTransiciones: Verifica que las transiciones esten
@@ -91,14 +98,15 @@ deleteJust (Just a) = a
 
 -- | transitaMoore: dado el inicial el automata procesa la cadena
 transitaMoore :: Moore -> [Alfabeto] -> [Estado]
-transitaMoore m s = inicial m :transitaAux (inicial m) (transiciones m) s
+transitaMoore m s = inicial (automataMoore  m) :transitaAux (inicial (automataMoore m))
+  (transiciones (automataMoore m)) s
 
 -- | traduceMoore: Obtiene la traudcción del automáta
 traduceMoore :: Moore -> [Alfabeto] -> Alfabeto
 traduceMoore m s = getRespuesta (last (transitaMoore m s)) (fRespuestas m)
 
 esFinal :: Moore -> Estado -> Bool
-esFinal m e = elem e $ finales m
+esFinal m e = elem e $ finales (automataMoore m)
 
 -- | aceptaMoore :: determina si una cadena es aceptada en el automáta o no.
 aceptaMoore :: Moore -> [Alfabeto] -> Bool

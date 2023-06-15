@@ -8,14 +8,8 @@
   
 *** Requerimientos
     
-    - [[https://hackage.haskell.org/package/gloss][Gloss]]
-      
-      Con cabal ejecutar: 
-
-      ~~$ cabal install gloss~
-
     - [[https://hackage.haskell.org/package/split][Split]]
 
       Con cabal ejecutar: 
 
-      ~~$ cabal install split~      
+      ~ ~$ cabal install split~      

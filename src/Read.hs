@@ -30,8 +30,9 @@ miSplit x = splitOn "=" x
 createDuple :: [[Char]] -> ([Char], [Char])
 createDuple [[]] = ([],[])
 createDuple x
-  | length x == 1 = if cabeza == "moore" || cabeza == "h" 
+  | length x == 1 = if cabeza == "moore"
                     then (cabeza, "1")
+                    --else if cabeza == "
                     else (cabeza, "ERROR")
   | length x == 2 = (cabeza, b)
   | otherwise     = ("ERROR", "ERROR")
@@ -97,3 +98,11 @@ getFinales :: [([Char], [Char])] -> [Estado]
 getFinales [] = []
 getFinales (("finales", x):_) = splitOn "," x
 getFinales (_:xs) = getFinales xs
+
+
+getTipo :: [([Char], [Char])] -> [Char]
+getTipo [] = []
+getTipo (("moore", x):_) = "moore"
+--getTipos (("moore", x):_) = "moore"
+-- Mealy
+fetTipo (_:xs) = getTipo xs
