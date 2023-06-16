@@ -1,35 +1,38 @@
-* TODO Implementación [0/4]
+* DONE Implementación [2/4]
   # Siguiendo la recomendación de Juan Pablo primero me enfocare en construir los automátas 
   # y visualizarlos. 
   # Junio 15: Desistí del entornio grafíco, si bien era parte fundamental de 
   #    la propuesta, por el tiempo es algo que tendré que descartar. Quiza pasar a svg
-  - [-] automata de .txt a Haskell
+  - [X] automata de .txt a Haskell
     - [X] Moore
-    - [ ] Mealy
+    - [X] Mealy
   - +Desplegarlo en entornio gráfico+
-  - [-] Trabajar con los automatas:
-    - [-] Traducir cadenas
+  - [X] Trabajar con los automatas:
+    - [X] Traducir cadenas
       - [X] Moore
-      - [ ] Mealy
-    - [-] Aceptar
+      - [X] Mealy
+    - [X] Aceptar
       - [X] Moore
-      - [ ] Mealy
-  - [ ] Traducir Automtas
-    - [ ] Moore -> Mealy
+      - [X] Mealy
+  - [-] Traducir Automtas
+    - [X] Moore -> Mealy
     - [ ] Mealy -> Moore
-  - [ ] De alguna forma desplegarlos(SVG o Terminal)
+  - [-] Menu
+    - [X] automataInicial
+    - [ ] Traducción
+      - [ ] guardar
 * Documento
-** Analísis del problema
-   - Importancía de Automátas   
-   - Traductores
-   - Equivalencia de Traductores
 ** Antecedentes
-   - Cursos Automatas y LF
+   - [X] Cursos Automatas y LF
+** Analísis del problema
+   - [X] Importancía de Automátas  
+   - [X] Traductores
+   - [ ] +Equivalencia de Traductores+
+** Implementación
+  - Hipótesis
+  - metodología
+  - Interpretación de resultados
+  - Propuesta de trabajo futuro 
 ** Revisión bibliográfica
    - Libro Elisa Viso
    - Conacyt
-* 
-- Hipótesis
-- metodología
-- Interpretación de resultados
-- Propuesta de trabajo futuro 

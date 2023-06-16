@@ -1,5 +1,5 @@
-\documentclass[12pt,letterpaper]{article}
-\usepackage[margin=2cm,includefoot]{geometry}
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1.5cm,includefoot]{geometry}
 \usepackage[spanish]{babel}
 
 \usepackage[utf8]{inputenc}
@@ -10,20 +10,275 @@
             citecolor = blue,
             anchorcolor = blue]{hyperref}
 
+\usepackage{listings}
 \usepackage{xcolor}
 \usepackage{amssymb}
-\usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{listings}
 \usepackage{graphicx}
-\graphicspath{ {img/} }
-\usepackage{fancyhdr}
+\usepackage{multicol}
+%%\graphicspath{ {img/} }
 
-\pagestyle{fancy}
-\fancyhf{}
-\lhead{{\it $\cdot$Diego Méndez Medina \hfill\break}}
-\chead{{\it Programación Declarativa \\Reporte Proyecto Final}}
+\title{Programación Declarativa \\ {\Reporte Proyecto}\\
+  {\it Automatás Traductores. Ejemplos, traducción y visualización.}}
+\date{}
+\author{{\bf Diego Méndez Medina  420004358}}
+
 
 \begin{document}
 
+\maketitle
+
+\tableofcontents
+
+\vspace{1cm}
+Como proyecto final de la materia Programación Declarativa se realizo
+una herramienta ({\it software}) escrita en {\tt HASKELL} que nos permite
+trabajar con automátas finitos traductores definidos en archivos
+y cambiarlos entre sus tipos (Moore y Mealy). Se visualiza la equivalencia y cuando es
+mejor uno sobre el otro.
+\begin{multicols}{2}
+  
+  \section{Antecedentes}
+
+  El automáta finito({\it AF}), con sus múltiples variantes,
+  es el modelo aceptador más {\it primitivo}. Pero
+  si modificamos, agregando una función, el modelo
+  lo convertimos, en no solo una maquína aceptadora,
+  sino también en una maquina traductora.
+
+  La definición de la función(de traducción) y sus posibles variaciones
+  es lo que nos permite, para {\it AF}, obtener dos traductores\cite{Viso}.
+  
+  Como experiencía personal y hablando con compañeros
+  que cursaron con otrxs profesores, no se suele
+  hablar de automátas traductores en los cursos de Automátas
+  y Lenguajes Formales que se dan en la Facultad de Ciencias.
+
+  El presente proyecto surgio como idea para familiarizarme
+  más con el concepto y también para tener una herramienta
+  que nos permita mostrar la traducción entre automátas traductores.  
+  \section{Analísis del Problema}
+  
+  El uso de automátas traductores es más {\it popular} en {\it aplicaciones}
+  que el de los automatás de aceptación. Esto por que los primeros
+  nos suelen permiter trabajar con toda la cadena, dar más información de esta
+  y así {\bf extender} el poder de computo sobre las mismas cadenas.
+
+  Un uso común es en el de compiladores para lexers pero también tienen
+  un uso muy conocido en el desarollo de circuitos y encriptación.
+
+  No todo automáta traductor es de aceptación\footnote{A pesar de
+  no ser aceptadores para que se lleve acabo la traducción el tipo de cadenas
+  se debe de poder aceptar para algún {\it AF}.\cite{Viso}}, el presente se enfoca
+  solo en automatás traductores que también son de aceptación. Si bien
+  los no aceptadores también tienen aplicaciones para la generación de
+  circuitos, lexers y encriptación es necesario tener un inicio.
+  
+  Como bien ya mencionamos para {\it AF} hay dos tipos de traductores y su
+  diferencia radica en la forma en la que la función de respuesta o traducción
+  esta definida. Veremos ahora la definición de cada uno.
+  
+  \subsection{Automata de Moore}
+
+  La respuesta de estos automátas depende {\bf exclusivamente} del estado
+  en el que se encuentra el automáta, así es independiente de la entrada.
+. Un automáta de Moore, también llamada
+  {\it de respuesta asignada por estado}, es una tupla
+  $M =(Q,\Sigma, O, \delta, \lambda, q_0, F)$, donde:
+
+  \begin{align*}
+    Q\ &: \text{Conjunto de estados}\\
+    \Sigma\ &:\  \text{Alfabeto de entrada}\\
+    O\ &:\  \text{Alfabeto de salida}\\
+    \delta\ &:\  \text{Función de transición}\\
+    &:\  Q\times \Sigma \rightarrow Q\\
+    \lambda &:\  \text{Función de respuesta}\\
+    &:\  Q\times \Sigma\rightarrow O^*\\
+    q_0\ &:\  \text{Estado inicial}\\
+    F\ &:\  \text{Conjunto de estados Finales}
+  \end{align*}
+  
+  \subsection{Automata de Mealy}
+  
+  Por otro lado en estos automátas dan su respuesta durante el proceso de la cadena.
+
+  También llamados automátas con respuesta asignada durante la transición es un tupla
+  $M =(Q,\Sigma, O, \delta, \lambda, q_0, F)$, donde:
+
+    \begin{align*}
+    Q\ &: \text{Conjunto de estados}\\
+    \Sigma\ &:\  \text{Alfabeto de entrada}\\
+    O\ &:\  \text{Alfabeto de salida}\\
+    \delta\ &:\  \text{Función de transición}\\
+    &:\  Q\times \Sigma \rightarrow Q\\
+    \lambda &:\  \text{Función de respuesta}\\
+    &:\  Q\rightarrow O^*\\
+    q_0\ &:\  \text{Estado inicial}\\
+    F\ &:\  \text{Conjunto de estados Finales}
+    \end{align*}
+
+    Como podemos ver son muy similares pues son una extensión de los {\it AF}
+    salvo por como lo hemos dicho la función de traducción o respuesta. Existe
+    una relación entre estos automátas y es que es posible hablar de la equivalencía
+    entre traductores. Decimos que un automáta de Moore y uno de Mealy son equivalentes
+    cuando podemos simular la conducta del otro modelo.
+    
+  \section{Implementación / Solución}
+  
+  En {\tt HASKELL} es común trabajar con automátas definiendo la función
+  de transición(delta), así ya incluimos los estados y el alfabeto y
+  por último damos la función de aceptación, donde en realidad solo
+  estamos determinando quienes son finales. Con ese acercamiento,
+  si bien eficaz, se pierde la noción conjuntista de los automátas como
+  tuplas.
+  
+  Lo que buscamos con el desarrollo del proyecto no es simplemente
+  generar automátas en un archivo con extensión {\it hs} y transformarlo,
+  sino crear una herramienta qie nos permita leer cualquier tipo de automáta
+  traductor y que mediante un formato especifico (archivo txt) trabajar
+  con este:\  aceptando cadenas del automáta traductor recibido,
+  traduciendo cadenas en este, pasar del tipo automáta traductor recibido
+  al otro tipo y hacer las mismas operaciones con este, por último también
+  guardar el automáta generado en un archivo para su posterior consulta.
+
+  {\it Lo siguiente es desarrollar el formato para guardar automátas en un
+    archivo para que nuestra herramienta lo lea y dar un panorama de la
+    implementación de nuestra herramienta.}
+  
+  \subsection{Definiendo el formato}
+
+  Vamos a trabajar con archivos de texto plano, donde se busca esten las siguientes
+  palabras reservadas:
+
+  \begin{align*}
+    &\text{Moore} & &\text{Mealy}\\
+    &\text{Finales} & &\text{Estados}\\
+    &\text{Entrada} & &\text{Salida}\\
+    &\text{Transición} & &\text{Respuesta}\\
+    &\text{Inicial}
+  \end{align*}
+
+  Cada archivo que represente un traductor debe tener todos de los anteriores salvo que
+  solo debe escojer entre {\it Moore} o {\it Mealy}, dependiendo del tipo que sea. Para cada
+  una de las palabras reservadas(salvo el tipo) se sigue un signo de igual que describe
+  el conjunto.
+  \begin{itemize}
+  \item Estados: Los estados son cadenas y estan separados por coma
+  \item Entrada: Es el alfabeto de entrada son caracteres separados por ','
+  \item Salida: Es el alfabeto de entrada son caracteres separados por ','
+  \item Finales: Similar a Estados.
+  \item Transición: Son de la forma Estado``->''Estado, estan separados por ','
+  \item Respuesta: Función de traducción y depende del tipo.
+    \begin{itemize}
+    \item Para Moore: Son de la forma: Estado->Salida
+    \item Para Mealy: Son de la forma: Estado->Entrada->Salida
+    \end{itemize}
+  \item Inicial: Un único estado.
+  \end{itemize}
+  
+  Al finalizar la descripción de cada conjunto se finaliza con un '.'. Se permite que haya
+  saltos de línea entre descripciones para no tener líneas muy largas. Es decir es valido tanto:
+
+  $$ Respuesta: q0->0->0, q0->1->1, q4->0->0.$$
+
+  como:
+
+  \begin{align*}
+    Respuesta: &q0->0->0, q0->1->1, \\
+    & q4->0->0.    
+  \end{align*}
+
+  Así mostramos a continuación la representación de dos automátas:
+
+  
+  \begin{align*}
+    Moore&.\\
+    Estados &= A,B,C,D.\\
+    Entrada &= 0,1.\\
+    Salida &= 0,1,2,3,4.\\
+    Transicion &= A->0->A, A->1->B, \\
+    &B->0->B, B->1->C,\\
+    &C->0->C, C->1->D, \\
+    &D->0->D, D->1->A.\\
+    Respuesta &= A->0, B->1, C->2, D->3.\\
+    Inicial &= A.\\
+    Finales &= A,B,C,D.\\  
+  \end{align*}
+
+  Automáta de Mealy que dada una cadena de bits de multiplos de cuatro
+  traduce la cadena de tal forma que para cuada cuatro bits que lea
+  los reproduce y genera un quinto bit de tal forma que el número de unos es impar. 
+  \begin{align*}
+    Mealy&.\\
+    Inicial    &= q0.\\
+    Finales    &= q0.\\
+    Estados    &= q0, q1, q2, q3, q4, q5, q6.\\
+    Entrada    &= 0, 1.\\
+    Salida     &= 0, 1.\\
+    Respuesta &= q0->0->0, q0->1->1,\\
+    &q4->0->0, q4->1->1,\\
+    &q1->0->0, q1->1->1, \\
+    &q5->0->0, q5->1->1,\\
+    &q2->0->0, q2->1->1, \\
+    &q6->0->01, q6->1->10,\\
+    &q3->0->00, q3->1->11.\\
+    Transicion  &= q0->0->q4, q0->1->q1,\\
+    & q4->0->q5, q4->1->q2,\\
+    &q1->0->q2, q1->1->q5,\\
+    &q5->0->q6, q5->1->q3,\\
+    &q2->0->q3, q2->1->q6,\\
+    &q6->0->q0, q6->1->q0,\\
+    &q3->0->q0, q3->1->q0.\\  
+  \end{align*}
+  
+  Para las palabras reservadas no hay distinción entre mayuscuas y minusculas, es decir
+  {\it Moore, moore, MoOre, MOre} y demás combinación son válidas. No confundir con
+  el lado derecho de la igualdad pues ahi si hay diferencia entre el estado {\it A} y {\it a},
+  sucede lo mismo con alfabetos. Tambíen no importa el uso de espacios, saltos de línea
+  ni tabulaciónes siempre y cuando esten las ocho palabras del automaáta finalizadas con
+  su respectivo punto. Por último no importa el orden en el que aparezcan. Como se vio en
+  los ejemplos. Estos automátas y otros ejemplos se encuentran en la carpeta {\it automatas/}
+  del repositorio.
+  
+  \subsection{Sobre la Implementación}
+
+  Vimos a cada traudctor como una extensión de los {\it AF}, y es así que definimos los
+  automátas de la siguiente manera:
+
+  \lstinputlisting[language=Haskell, firstline=1, lastline=27]{../src/Automata.hs}
+
+  Observamos que en efecto en lo único
+  que varian es en la función de respuestas.
+  También observamos que tratamos a las funciones
+  como tuplas donde los primeros elementos son
+  el dominio y el último el regreso.
+  
+  Así definimos las funciones normales para automátas que nos permiten procesar cadenas:
+
+  Transita sobre el autómata dada la cadena
+  \lstinputlisting[language=Haskell, firstline=78, lastline=78]{../src/Automata.hs}
+
+  Acepta el autómata
+  \lstinputlisting[language=Haskell, firstline=98, lastline=98]{../src/Automata.hs}
+
+  Su implementación como las funciones auxiliares se encuentran en la carpeta src
+  del repositorio.
+
+  \subsection{Traduciendo Traductores}
+
+  
+  \section{Conclusión}
+  Es por eso que si bien estos traducen no suelen ser efectivos
+  para un método de encriptación general, pues como veremos a la hora de traducir necesitan
+  un mayor numero de estados
+  \section{Revisión Bibliográfica}  
+  \begin{thebibliography}{1}
+  \bibitem{Viso} Elisa Viso, E. ``Introducción a Autómatas y Lenguajes Formales'',
+    UNAM, CDMX, 2015.
+  \bibitem{Cinvestav} Guillermo Morales, L.  ``Máquinas secuenciales'',
+    CINVESTAV, CDMX, Junio del 21. Recuperado en Junio del 2023 de el siguiente
+    \href{https://delta.cs.cinvestav.mx/~gmorales/ta/node48.html}{enlace}.
+  \end{thebibliography}  
+\end{multicols}
 \end{document}

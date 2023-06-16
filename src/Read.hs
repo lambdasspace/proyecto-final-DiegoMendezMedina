@@ -32,7 +32,8 @@ createDuple [[]] = ([],[])
 createDuple x
   | length x == 1 = if cabeza == "moore"
                     then (cabeza, "1")
-                    --else if cabeza == "
+                    else if cabeza == "mealy"
+                         then  (cabeza, "2")
                     else (cabeza, "ERROR")
   | length x == 2 = (cabeza, b)
   | otherwise     = ("ERROR", "ERROR")
@@ -74,6 +75,8 @@ getTrans [] = []
 getTrans (("transicion", x):_) = setTrans $ decompose ( splitOn "," x)
 getTrans (_:xs) = getTrans xs
 
+-- | getRes: Permite leer los valores del archivo de un
+--         automáta de Moore.
 getRes :: [([Char], [Char])] -> [Respuesta]
 getRes [] = []
 getRes (("respuesta", x):_) = setRes $ decompose (splitOn "," x)
@@ -83,11 +86,26 @@ setRes :: [[[Char]]] -> [Respuesta]
 setRes [] = []
 setRes (x:xs) 
   | length x == 2 = (a,b):setRes xs
-  | otherwise     = [("ERROR", '0')]
+  | otherwise     = [("ERROR", "0")]
+  where
+    a = head x
+    b = head $ drop 1 x
+
+getResMealy :: [([Char], [Char])] -> [RespuestaMealy]
+getResMealy [] = []
+getResMealy (("respuesta", x):_) = setResM $ decompose (splitOn "," x)
+getResMealy (_:xs) = getResMealy xs
+
+setResM :: [[[Char]]] -> [RespuestaMealy]
+setResM [] = []
+setResM (x:xs) 
+  | length x == 3 = (a,b,c):setResM xs
+  | otherwise     = [("ERROR", '0', "ERROR")]
   where
     a = head x
     b = head $ head $ drop 1 x
-
+    c = head $ drop 2 x
+    
 getInit :: [([Char], [Char])] -> Estado
 getInit [] = []
 getInit (("inicial", x):_) = x
@@ -103,6 +121,5 @@ getFinales (_:xs) = getFinales xs
 getTipo :: [([Char], [Char])] -> [Char]
 getTipo [] = []
 getTipo (("moore", x):_) = "moore"
---getTipos (("moore", x):_) = "moore"
--- Mealy
-fetTipo (_:xs) = getTipo xs
+getTipo (("mealy", x):_) = "mealy"
+getTipo (_:xs) = getTipo xs
