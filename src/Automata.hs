@@ -101,13 +101,31 @@ esFinal m e = elem e $ finales m
 acepta :: Automata -> [Alfabeto] -> Bool
 acepta m s = esFinal m (last list) && length list == length s +1
   where list = transita m s
+
+automataToString :: Automata -> String
+automataToString m = "Inicial = " ++ (inicial m) ++ ".\nEstados = "++estadosToString (estados m)
+  ++ "Finales = " ++ estadosToString (finales m) ++ "Entrada = " ++ (alfabetoEntrada m)
+  ++ ".\nSalida = " ++ (alfabetoSalida m) ++".\nTransicion = " ++ transicionesToString (transiciones m)
   
+estadosToString :: [Estado] -> String
+estadosToString (x:[]) = x++".\n"
+estadosToString (x:xs) = x++","++estadosToString xs
+
+transicionesToString :: [Transicion] -> String
+transicionesToString ((a,b,c):[]) = a ++"->"++ (b:[]) ++ "->" ++ c
+  ++ ".\n"
+transicionesToString ((a,b,c):xs) = a ++"->"++ (b:[]) ++ "->" ++ c
+  ++ "," ++ transicionesToString xs
 ---
 -- MOORE
 --
 -- | checkMoore: No verifica la correctitud del automáta, sino
 --               que las funciones de transicion y respuesta,
 --              así como el Inicial y Finales esten definidos correctamente.
+mooreResToString :: [Respuesta] -> String
+mooreResToString ((a,b):[]) = a++"->"++b++".\n"
+mooreResToString ((a,b):xs) = a++"->"++b++", " ++ mooreResToString xs
+
 checkMoore :: Moore -> Bool
 checkMoore m = checkRes && checkAutomata (automataMoore m) 
   where
@@ -154,6 +172,10 @@ toMealyAux ((a,b,c):xs) l = (a,b,d):toMealyAux xs l
 ---
 -- MEALY
 ---
+mealyResToString :: [RespuestaMealy] -> String
+mealyResToString ((a,b,c):[]) = a ++ "->" ++ (b:[]) ++ "->" ++c ++ ".\n"
+mealyResToString ((a,b,c):xs) = a ++ "->" ++ (b:[]) ++ "->" ++ c ++ "," ++ mealyResToString xs
+  
 checkMealy :: Mealy -> Bool
 checkMealy m = checkAutomata (automataMealy m) && checkResMealy
   where

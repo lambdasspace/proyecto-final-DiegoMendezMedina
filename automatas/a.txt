@@ -1,9 +1,0 @@
-Moore.
-Estados = A,B,C,D.
-Entrada = 0,1.
-Salida = 0,1,2,3,4.
-Transicion = A->0->A, A->1->B, B->0->B, B->1->C,
-	   C->0->C, C->1->D, D->0->D, D->1->A.
-Respuesta = A->0, B->1, C->2, D->3.
-Inicial = A.
-Finales = A,B,C,D.

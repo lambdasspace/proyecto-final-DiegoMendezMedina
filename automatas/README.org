@@ -1,0 +1,76 @@
+* Automatas 
+
+** Sobre los ejemplos: 
+   + cuentaUnosMoore.txt      
+
+     Ejemplo 2.6.1 del Libro de Elisa Viso: Cuanta los 1's 
+     en una cadena de Bits. Regresa: 
+     - 0 si ha visto 4n unos
+     - 1 si ha visto 4n+1 unos
+     - 2 si ha visto 4n+2 unos
+     - 3 si ha visto 4n+3 unos
+
+   + ejMealy.txt
+
+     Figura 2.10 del libro de EV.
+
+   + ejMoore.txt
+
+     Figura 2.9 del libro de EV.
+
+   + pariedadBitsMealy.txt
+
+     Figura 2.11 del EV. Cada cuatro bits leidos
+     reproduce los primeros tres bits y agrega dos de 
+     tal forma que el número de unos es impar. Consideramos
+     como aceptada una cadena si se leyo un múltiplo de cuatro
+     bits.
+
+   + simpleLExer.txt 
+
+     Ejemplo 2.6.3 EV
+
+   + youtubeMEaly.txt
+
+     Sacado de este [[https://www.youtube.com/watch?v=-etILQcfgTg&ab_channel=NesoAcademy][video]]
+
+   + funcionaMealyToMoore.txt
+     
+     resultado de introducir al programa /pariedadBitsMealy.txt/, traducirlo y guardarlo.
+** Formato
+  
+  Los de Moore deben tener el siguiente formato: 
+
+  /Moore./
+  /Respuesta = cadena1->c, ..., cadena1'->c'./
+  /Entrada = c, a, b, ..., z./
+  /salida = c, a, b, ... l./
+  /Estado = cadena1, cadena2, ...., cadenaM./
+  /Inicial = cadena1./
+  /Final = cadena1, cadena 2, ..., cadenaO. /
+  /Transicion = cadena1->cadena2->cadena3, ..., cadena'1->cadena'2->cadena'3./
+  
+  
+  Donde /c, a, b, l, z/ representan caracteres y las cadenas son de cualquier longitud.
+
+  Los de Mealy son similares salvo por la palabra "Moore" y las Respuestas: 
+
+  /Mealy/. 
+  /Respuesta = cadena1->c->cadena2, ..., cadena1'->c'->cadena2'./
+  /Entrada = c, a, b, ..., z./
+  /salida = c, a, b, ... l./
+  /Estado = cadena1, cadena2, ...., cadenaM./
+  /Inicial = cadena1./
+  /Final = cadena1, cadena 2, ..., cadenaO./
+  /Transicion = cadena1->cadena2->cadena3, ..., cadena'1->cadena'2->cadena'3./
+  
+  Note las comas para enumerar y el punto para índicar la finalización. 
+
+  No importa el orden en el que aparezcan el punto al finalizar es necesario, 
+  se permite el salto de línea entre declaraciones. Es decir: 
+
+  /Respuesta = Cas -> a -> cad,/
+              /cae -> b -> cad./
+
+  Es igual de valido.
+

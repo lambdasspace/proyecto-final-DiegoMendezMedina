@@ -257,10 +257,10 @@ mejor uno sobre el otro.
   Así definimos las funciones normales para automátas que nos permiten procesar cadenas:
 
   Transita sobre el autómata dada la cadena
-  \lstinputlisting[language=Haskell, firstline=78, lastline=78]{../src/Automata.hs}
+  \lstinputlisting[language=Haskell, firstline=81, lastline=81]{../src/Automata.hs}
 
   Acepta el autómata
-  \lstinputlisting[language=Haskell, firstline=98, lastline=98]{../src/Automata.hs}
+  \lstinputlisting[language=Haskell, firstline=101, lastline=101]{../src/Automata.hs}
 
   Su implementación como las funciones auxiliares se encuentran en la carpeta src
   del repositorio.
@@ -274,14 +274,34 @@ mejor uno sobre el otro.
   es mucho más facíl e intuitiva de entender y programar. 
   
   \section{Conclusión}
-  Es por eso que si bien estos traducen no suelen ser efectivos
-  para un método de encriptación general, pues como veremos a la hora de traducir necesitan
-  un mayor numero de estados
 
+  Traducir de Mealey a Moore resulta costoso, pues generamos muchos más estados con
+  su respectiva traducción, a los cuales es necesario añadir las transiciones necesarias.
+
+  Basta con ver el ejemplo de la máquina que traduce la pariedad de Bits, se encuentra
+  como {\it pariedadBitsMealy.txt}, el cual cuenta con 10 funciones de respuesta/transición
+  y 7 estados. Su traducción genera 11 estados y 14 traducciones/transiciónes. 
+  
+  Es por eso que los de moore no suelen ser efectivos para un método de encriptación físico,
+  pues necesitan un mayor numero de estados i.e de recursos y complejidad.
+
+  Es posible que se nos facilite hacer más un automáta de Moore que de Mealey,o viceversa,
+  con nuestra herramienta logramos la traducción y además podemos trabajar con ambos automátas.
+  
   Se descubrio un typo en el automáta de la figura 2.10\cite{Viso}, a la traducción
   le hace falta la transición B0->0->B1.
-  \section{Revisión Bibliográfica}  
-  \begin{thebibliography}{1}
+  \subsection{Trabajo Futuro}
+
+  \begin{itemize}
+  \item No se logro hacer una interfaz grafica para desplegarlos.
+
+  \item Se puede extender a diferentes automátas, con sus respectivos traductores.
+    
+  \item Implementar el algoritmo de reducción.
+  \end{itemize}
+  
+    \section{Revisión Bibliográfica}  
+    \begin{thebibliography}{1}
   \bibitem{Viso} Elisa Viso, E. ``Introducción a Autómatas y Lenguajes Formales'',
     UNAM, CDMX, 2015.
   \bibitem{Cinvestav} Guillermo Morales, L.  ``Máquinas secuenciales'',

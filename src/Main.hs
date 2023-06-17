@@ -2,6 +2,7 @@ module Main where
 
 import System.IO
 import System.Exit
+import System.Directory
 import Control.Monad
 import Data.Set
 import Automata
@@ -125,8 +126,19 @@ menu2 automata moore mealy tipo= do
             menu2 automata moore mealy tipo
     2 -> do procesaEntrada automata moore mealy tipo
             menu2 automata moore mealy tipo
-    3 -> do if tipo == "moore" then do print (inicial automata)
-              else do print (inicial automata)
+    3 -> do
+      file <- mPut "El Archivo se guardara en la carpea automatas\n. Nombre del archivo: "
+      fileExist <- doesFileExist$ "../automatas/"++file
+      if fileExist then do
+        putStrLn "ERROR: El archivo ya existe, intenta con otro nombre..."
+        else do
+        putStrLn "El archivo no existe, Guardando..."
+        let cadena = automataToString automata
+        let salida = if tipo == "moore" then
+              "Moore.\nRespuesta = " ++ mooreResToString (fRespuestas moore)
+              else  "Mealy.\nRespuesta = " ++ mealyResToString (fRespuestasM mealy)
+        writeFile ("../automatas/"++file) $ salida ++ cadena
+        putStrLn "Se guardo con exito"
     4 -> return ()
     5 -> exitFailure
     _ -> do putStrLn "ERROR: Opción no definida"
