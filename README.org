@@ -9,8 +9,9 @@
 *** Requerimientos
     
     - [[https://hackage.haskell.org/package/split][Split]]
-      Con cabal ejecutar: 
 
+      Con cabal ejecutar: 
+      
       ~$ cabal install split~
 
     - Automatas: 
@@ -21,11 +22,15 @@
       El formato de los automátas se decribe en el reporte.Forzosamente 
       deben tener los 8 atributos para continuar con la ejecución.       
 *** Compilar     
+
     En src ejecutar: 
+
     ~src/$ ghc Main.hs~
     
 *** Ejecutar     
+
     En src ejecutar: 
+
     ~src/$ ./Main~
 
 

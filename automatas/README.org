@@ -42,12 +42,19 @@
   Los de Moore deben tener el siguiente formato: 
 
   /Moore./
+
   /Respuesta = cadena1->c, ..., cadena1'->c'./
+
   /Entrada = c, a, b, ..., z./
+
   /salida = c, a, b, ... l./
+
   /Estado = cadena1, cadena2, ...., cadenaM./
+
   /Inicial = cadena1./
+
   /Final = cadena1, cadena 2, ..., cadenaO. /
+
   /Transicion = cadena1->cadena2->cadena3, ..., cadena'1->cadena'2->cadena'3./
   
   
@@ -56,12 +63,19 @@
   Los de Mealy son similares salvo por la palabra "Moore" y las Respuestas: 
 
   /Mealy/. 
+
   /Respuesta = cadena1->c->cadena2, ..., cadena1'->c'->cadena2'./
+
   /Entrada = c, a, b, ..., z./
+
   /salida = c, a, b, ... l./
+
   /Estado = cadena1, cadena2, ...., cadenaM./
+
   /Inicial = cadena1./
+
   /Final = cadena1, cadena 2, ..., cadenaO./
+
   /Transicion = cadena1->cadena2->cadena3, ..., cadena'1->cadena'2->cadena'3./
   
   Note las comas para enumerar y el punto para índicar la finalización. 
@@ -70,6 +84,7 @@
   se permite el salto de línea entre declaraciones. Es decir: 
 
   /Respuesta = Cas -> a -> cad,/
+
               /cae -> b -> cad./
 
   Es igual de valido.
