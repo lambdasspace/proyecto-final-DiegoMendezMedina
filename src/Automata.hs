@@ -1,5 +1,8 @@
 module Automata where
 
+import Data.List
+import Data.Set
+
 type Estado = [Char]
 type Alfabeto = Char
 type Transicion = (Estado, Alfabeto,
@@ -182,9 +185,99 @@ auxCompletoMealy :: [Estado] -> [RespuestaMealy] -> [Alfabeto] -> [[Alfabeto]]
 auxCompletoMealy _ _ [] = []
 auxCompletoMealy [] _ _ = []
 auxCompletoMealy (x:xs) l (c:cs) = (getRespuestaMealy x c l):(auxCompletoMealy xs l cs)
+                    
+mealyToMooreEstados :: Mealy -> [Estado]
+mealyToMooreEstados m = toList $ fromList $ nuevosEstados e t r
+  where
+    automata = automataMealy m
+    e = estados automata
+    t = transiciones automata
+    r = fRespuestasM m
 
---toMoore :: Mealy -> Moore
---toMoore m = 
+nuevosEstados :: [Estado] -> [Transicion] -> [RespuestaMealy] -> [Estado]
+nuevosEstados [] _ _ = []
+nuevosEstados (x:xs) t r = (nuevoEstado x t r)++ nuevosEstados xs t r
+
+nuevoEstado :: Estado-> [Transicion] -> [RespuestaMealy] -> [Estado]
+nuevoEstado e l r
+  | length (splitEstado e l r) == 0 = [e]
+  | otherwise                       = auxEstados (splitEstado e l r) 
+
+auxEstados :: [(Estado, [Alfabeto])] -> [Estado]
+auxEstados [] = []
+auxEstados ((a,b):xs) = (a++b):auxEstados xs
+
+splitEstados :: [Estado] -> [Transicion] -> [RespuestaMealy] -> [[(Estado, [Alfabeto])]]
+splitEstados [] _ _ = []
+splitEstados (x:xs) l r = splitEstado x l r : splitEstados xs l r
+
+splitEstados' :: [Estado] -> [Transicion] -> [RespuestaMealy] -> [(Estado, Alfabeto, Estado, [Alfabeto])]
+splitEstados' [] _ _ = []
+splitEstados' (x:xs) l r = splitEstado' x l r ++ splitEstados' xs l r
+
+nuevasTransiciones :: [(Estado, Alfabeto, Estado, [Alfabeto])] -> [Transicion] -> [RespuestaMealy] -> [Transicion]
+nuevasTransiciones [] _ _ = []
+nuevasTransiciones ((a,b,c,s):xs) t r
+  | length (splitEstado a t r) == 0 = [(a, b, (c++s))] ++ nuevasTransiciones xs t r
+  | otherwise                       =  auxPrueba (splitEstado a t r) b (c++s) ++ nuevasTransiciones xs t r
+
+auxPrueba :: [(Estado, [Alfabeto])] -> Alfabeto -> [Alfabeto] ->[Transicion]
+auxPrueba [] _ _ = []
+auxPrueba ((a,b):xs) c s = [((a++b), c, s)]++auxPrueba xs c s
+  
+splitEstado' :: Estado -> [Transicion] -> [RespuestaMealy] -> [(Estado, Alfabeto, Estado, [Alfabeto])]
+splitEstado' e [] _ = []
+splitEstado' x ((a,b,c):ys) l
+  | x == c = (a, b, x, f):splitEstado' x ys l
+  | otherwise = splitEstado' x ys l
+  where f = getEstadoAlfb (a,b,c) l
+
+splitEstado :: Estado -> [Transicion] -> [RespuestaMealy] -> [(Estado, [Alfabeto])]
+splitEstado e [] _ = []
+splitEstado x ((a,b,c):ys) l
+  | x == c = (x, f):splitEstado x ys l
+  | otherwise = splitEstado x ys l
+  where f = getEstadoAlfb (a,b,c) l
+
+-- | getEstadoAlfb: dado el estado el origen de una transicion obtenemos
+--                la salida asociada a dicha transición.
+getEstadoAlfb :: Transicion -> [RespuestaMealy] -> [Alfabeto]
+getEstadoAlfb _ [] = []
+getEstadoAlfb (a,b,c) ((d,e,f):xs)
+  | a == d && b == e = f
+  | otherwise        = getEstadoAlfb (a,b,c) xs
+
+
+nuevasRespuestas :: [Estado] -> [Transicion] -> [RespuestaMealy] -> [Respuesta]
+nuevasRespuestas [] _ _ = []
+nuevasRespuestas (x:xs) t r = nuevaRespuesta x t r ++ (nuevasRespuestas xs t r)
+
+nuevaRespuesta :: Estado -> [Transicion] -> [RespuestaMealy] -> [Respuesta]
+nuevaRespuesta x t r
+  | (length (splitEstado x t r)) == 0 = [(x, "_")]
+  | otherwise                 =  nuevaRespuestaAux (splitEstado x t r) 
+
+nuevaRespuestaAux :: [(Estado, [Alfabeto])] -> [Respuesta]
+nuevaRespuestaAux [] = []
+nuevaRespuestaAux ((a,b):xs) = ((a++b), b):nuevaRespuestaAux xs
+
+nuevoInicial :: Mealy -> Estado
+nuevoInicial m = a++b
+  where automata = automataMealy m
+        (a,b) = head $splitEstado (inicial automata) (transiciones automata) (fRespuestasM m)
+        
+nuevosFinales :: Mealy -> [Estado]
+nuevosFinales m = nuevosFinalesAux l
+  where automata = automataMealy m
+        l = splitEstados (finales automata) (transiciones automata) (fRespuestasM m)
+
+nuevosFinalesAux :: [[(Estado, [Alfabeto])]] -> [Estado]
+nuevosFinalesAux [] = []
+nuevosFinalesAux (l:ls) = (auxList l) ++ (nuevosFinalesAux ls)
+
+auxList :: [(Estado, [Alfabeto])] -> [Estado]
+auxList [] = []
+auxList ((a,b):xs) = (a++b):auxList xs
 ---
 -- AMBOS
 ---
@@ -193,3 +286,4 @@ checkResAux [] _ = True
 checkResAux (x:xs) l
   | elem x l = checkResAux xs l
   | otherwise = False
+

@@ -1,0 +1,10 @@
+MEaly.
+Inicial = A.
+Finales = B.
+Entrada = 0,1.
+Salida = 0,1.
+esTados = A, B.
+transicion = A->0->A, A->1->B,
+	   B->1->A, B->0->B.
+Respuesta = A->0->1, A->1->1,
+	  B->0->0, B->1->0.

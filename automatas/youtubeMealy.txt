@@ -1,0 +1,12 @@
+Mealy.
+Inicial = A.
+Finales = B, C.
+Estados = A,B,C.
+transicion = A->0->B, A->1->C,
+	   B->0->B, B->1->C,
+	   C->1->C, C->0->B.
+respuesta = A->0->a, A->1->a,
+	  B->0->b, B->1->a,
+	  C->0->a, C->1->b.
+Entrada = 0,1.
+salida = a,b.

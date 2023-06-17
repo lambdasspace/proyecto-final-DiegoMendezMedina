@@ -3,6 +3,7 @@ module Main where
 import System.IO
 import System.Exit
 import Control.Monad
+import Data.Set
 import Automata
 import Read
 
@@ -23,7 +24,7 @@ main = do
   putStrLn "Leo automátas que se encuentran en la carpeta automatas"
   archivo <- mPut "Archivo donde se encuentra el automáta: "
   contents <- readFile $ "../automatas/"++archivo
-  let values = map createDuple $ map miSplit $ removeBlank $ readLines $  contents
+  let values = Prelude.map createDuple $ Prelude.map miSplit $ removeBlank $ readLines $  contents
   if (length values) /= 8
     then do
     putStrLn "Lectura de Archivo Fallido.\nRecuerda poner '.' al final de tus declaraciones"
@@ -88,7 +89,23 @@ menu automata values tipo= do
         let meal = toMealy moore
         menu2 automata moore meal "mealy"
         else do
-        print "falta"
+        --let mor = toMoore mealy
+        --menu2 automata mor mealy "moore"
+        let splits2 = splitEstados' (estados automata) (transiciones automata) (fRespuestasM mealy)
+        let automata2 = Automata{
+              estados = mealyToMooreEstados mealy,
+              alfabetoEntrada = (alfabetoEntrada (automataMealy mealy)),
+              alfabetoSalida = (alfabetoSalida (automataMealy mealy)),
+              transiciones =  toList $ fromList $nuevasTransiciones splits2 (transiciones automata) (fRespuestasM mealy),
+              inicial = nuevoInicial mealy,
+              finales = nuevosFinales mealy
+              }
+        let nResMoore = nuevasRespuestas (estados automata) (transiciones automata) (fRespuestasM mealy)
+        let mor = Moore{
+              automataMoore = automata2,
+              fRespuestas = nResMoore
+                }
+        menu2 automata2 mor mealy "moore"
     4 -> exitFailure
     _ -> do
       putStrLn "ERROR: Opción no definida"
@@ -108,7 +125,8 @@ menu2 automata moore mealy tipo= do
             menu2 automata moore mealy tipo
     2 -> do procesaEntrada automata moore mealy tipo
             menu2 automata moore mealy tipo
-    --3 -> Guardar en txt
+    3 -> do if tipo == "moore" then do print (inicial automata)
+              else do print (inicial automata)
     4 -> return ()
     5 -> exitFailure
     _ -> do putStrLn "ERROR: Opción no definida"

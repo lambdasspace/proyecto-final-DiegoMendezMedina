@@ -1,4 +1,4 @@
-* DONE Implementación [2/4]
+* DONE Implementación [3/4]
   # Siguiendo la recomendación de Juan Pablo primero me enfocare en construir los automátas 
   # y visualizarlos. 
   # Junio 15: Desistí del entornio grafíco, si bien era parte fundamental de 
@@ -14,13 +14,12 @@
     - [X] Aceptar
       - [X] Moore
       - [X] Mealy
-  - [-] Traducir Automtas
+  - [X] Traducir Automtas
     - [X] Moore -> Mealy
-    - [ ] Mealy -> Moore
+    - [X] Mealy -> Moore
   - [-] Menu
     - [X] automataInicial
-    - [ ] Traducción
-      - [ ] guardar
+    - [ ] guardarTraduccion
 * Documento
 ** Antecedentes
    - [X] Cursos Automatas y LF
